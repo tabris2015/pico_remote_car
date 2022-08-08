@@ -121,7 +121,6 @@ uint32_t millis() {
 int map_values(int x, int in_min, int in_max, int out_min, int out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
-//map
 
 int main() {
     setup(UART_ID, BAUD_RATE, UART_TX_PIN, UART_RX_PIN, DATA_BITS, STOP_BITS, PARITY);
@@ -171,28 +170,7 @@ int main() {
                     (uint8_t) map_values((int)sbus_frame.rcChannelsData.ch2, 172, 1811, 0, 255)
                     ));
             neopixel.show();
-//            sprintf(
-//                    out_buffer,
-//                    "0: %d\t1: %d\t2: %d\t3: %d\t4: %d\t5: %d\t6: %d\t7: %d\t8: %d\t9: %d\t10: %d\r\n",
-//                    sbus_frame.rcChannelsData.ch0,
-//                    sbus_frame.rcChannelsData.ch1,
-//                    sbus_frame.rcChannelsData.ch2,
-//                    sbus_frame.rcChannelsData.ch3,
-//                    sbus_frame.rcChannelsData.ch4,
-//                    sbus_frame.rcChannelsData.ch5,
-//                    sbus_frame.rcChannelsData.ch6,
-//                    sbus_frame.rcChannelsData.ch7,
-//                    sbus_frame.rcChannelsData.ch8,
-//                    sbus_frame.rcChannelsData.ch9,
-//                    sbus_frame.rcChannelsData.ch10
-//            );
-//            uart_puts(UART_ID, out_buffer);
         }
-//        neopixel.fill(PicoLed::RGB(255, 0, 0));
-//        neopixel.show();
-//        sleep_ms(500);
-//        neopixel.fill(PicoLed::RGB(0, 255, 0));
-//        neopixel.show();
-//        sleep_ms(500);
+
     }
 }
