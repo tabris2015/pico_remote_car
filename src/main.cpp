@@ -8,6 +8,8 @@
 #include <PicoLed.hpp>
 #include <Effects/Marquee.hpp>
 
+#include "dc_motor.h"
+
 #define UART_ID uart0
 #define BAUD_RATE 100000
 #define DATA_BITS 8
@@ -17,10 +19,24 @@
 #define UART_TX_PIN 0
 #define UART_RX_PIN 1
 
-#define DEBUG_INTERVAL_MS 100
+#define DEBUG_INTERVAL_MS 20
 
 #define LED_PIN 23
 #define LED_LENGTH 1
+
+#define ROBOT_WHEEL_RADIUS 0.0325f
+#define ROBOT_WHEEL_SEPARATION 0.17f
+
+#define M1_PWM_PIN 2
+#define M1_ENA_PIN 3
+#define M1_ENB_PIN 4
+
+#define M2_PWM_PIN 7
+#define M2_ENA_PIN 5
+#define M2_ENB_PIN 6
+
+DCMotor l_motor(M1_ENA_PIN, M1_ENB_PIN, M1_PWM_PIN);
+DCMotor r_motor(M2_ENA_PIN, M2_ENB_PIN, M2_PWM_PIN);
 
 typedef struct channels_s
 {
@@ -60,12 +76,23 @@ char out_buffer[100];
 
 uint32_t last_time_out;
 
+
+
 // RX interrupt handler
 void on_uart_rx() {
     while (uart_is_readable(UART_ID)) {
         uint8_t ch = uart_getc(UART_ID);
         queue_try_add(&queue, &ch);
     }
+}
+
+void set_unicycle(float v, float w, DCMotor & l_motor, DCMotor & r_motor) {
+
+    float v_l = (2 * v - w * ROBOT_WHEEL_SEPARATION) / (2 * ROBOT_WHEEL_RADIUS);
+    float v_r = (2 * v + w * ROBOT_WHEEL_SEPARATION) / (2 * ROBOT_WHEEL_RADIUS);
+
+    l_motor.write(v_l);
+    r_motor.write(v_r);
 }
 
 void setup(uart_inst *uart_id, uint baud_rate, uint tx_pin, uint rx_pin, uint data_bits, uint stop_bits, uart_parity_t parity) {
@@ -133,6 +160,13 @@ int main() {
     auto neopixel = PicoLed::addLeds<PicoLed::WS2812B>(pio0, 0, LED_PIN, LED_LENGTH, PicoLed::FORMAT_GRB);
     neopixel.setBrightness(32);
 
+    sbus_frame.rcChannelsData.ch0 = (1811 - 172) / 2 + 172;
+    sbus_frame.rcChannelsData.ch1 = (1811 - 172) / 2 + 172;
+    sbus_frame.rcChannelsData.ch2 = (1811 - 172) / 2 + 172;
+
+    l_motor.write(0);
+    r_motor.write(0);
+
     while (true) {
         // sbus handling
         while(!queue_is_empty(&queue)) {
@@ -170,6 +204,10 @@ int main() {
                     (uint8_t) map_values((int)sbus_frame.rcChannelsData.ch2, 172, 1811, 0, 255)
                     ));
             neopixel.show();
+            float linear = (float)(map_values((int)sbus_frame.rcChannelsData.ch2, 172, 1811, 0, 500)) / 1000.0F;
+            float angular = (float)(map_values((int)sbus_frame.rcChannelsData.ch0, 172, 1811, -500, 500)) / 1000.0F;
+            // motors
+            set_unicycle(linear*0.25F, angular, l_motor, r_motor);
         }
 
     }
