@@ -18,6 +18,9 @@ set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 # Initialize the SDK
 pico_sdk_init()
 
+## other executables
+add_subdirectory(uart_test)
+
 # include neopixel lib
 include(PicoLED/PicoLed.cmake)
 # Add your source files
@@ -44,6 +47,7 @@ add_executable(${NAME}
 target_link_libraries(${NAME}
         pico_stdlib
         PicoLed
+        hardware_uart
 #        pico_explorer
 #        pico_graphics
         # st7789 
@@ -55,7 +59,7 @@ target_link_libraries(${NAME}
 # create map/bin/hex file etc.
 pico_add_extra_outputs(${NAME})
 pico_enable_stdio_usb(${NAME} 1)
-pico_enable_stdio_uart(${NAME} 0)
+pico_enable_stdio_uart(${NAME} 1)
 
 ## Set up files for the release packages
 #install(FILES
