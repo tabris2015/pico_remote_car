@@ -20,34 +20,25 @@ pico_sdk_init()
 
 ## other executables
 add_subdirectory(uart_test)
+add_subdirectory(motor_test)
+
 
 # include neopixel lib
 include(PicoLED/PicoLed.cmake)
 # Add your source files
 add_executable(${NAME}
         src/main.cpp # <-- Add source files here!
+        src/dc_motor.cpp
         )
 
-# Include required libraries
-# This assumes `pimoroni-pico` is stored alongside your project
-#include(libraries/bitmap_fonts/bitmap_fonts)
-#include(libraries/hershey_fonts/hershey_fonts)
-#include(libraries/pico_explorer/pico_explorer)
-#include(common/pimoroni_bus)
-
-# include(libraries/pico_display/pico_display)
-#include(libraries/pico_display/pico_display)
-# include(lilygo_tdisplay/lilygo_tdisplay.cmake)
-# include(drivers/st7789/st7789)
-# include(drivers/analog/analog)
-# include(drivers/button/button)
-# include(drivers/motor/motor)
+target_include_directories(${NAME} PRIVATE include)
 
 # Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
         pico_stdlib
         PicoLed
         hardware_uart
+        hardware_pwm
 #        pico_explorer
 #        pico_graphics
         # st7789 
