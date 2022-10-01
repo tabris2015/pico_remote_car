@@ -18,10 +18,18 @@ set(PICO_CXX_ENABLE_EXCEPTIONS 1)
 # Initialize the SDK
 pico_sdk_init()
 
+include(common/pimoroni_i2c)
+include(common/pimoroni_bus)
+include(libraries/pico_explorer/pico_explorer)
+include(libraries/bitmap_fonts/bitmap_fonts)
+include(libraries/hershey_fonts/hershey_fonts)
+include(drivers/msa301/msa301)
 ## other executables
 add_subdirectory(uart_test)
 add_subdirectory(motor_test)
 add_subdirectory(encoder_test)
+add_subdirectory(mpu_test)
+add_subdirectory(explorer_test)
 
 
 # include neopixel lib
