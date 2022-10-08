@@ -1,0 +1,6 @@
+add_executable(encoder_pimoroni_test encoder_pimoroni_test.cpp)
+target_include_directories(encoder_pimoroni_test PRIVATE ../include)
+target_link_libraries(encoder_pimoroni_test pico_stdlib encoder)
+pico_add_extra_outputs(encoder_pimoroni_test)
+pico_enable_stdio_usb(encoder_pimoroni_test 1)
+

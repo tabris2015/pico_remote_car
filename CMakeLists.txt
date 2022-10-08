@@ -24,13 +24,15 @@ include(libraries/pico_explorer/pico_explorer)
 include(libraries/bitmap_fonts/bitmap_fonts)
 include(libraries/hershey_fonts/hershey_fonts)
 include(drivers/msa301/msa301)
+include(drivers/encoder/encoder)
+
 ## other executables
 add_subdirectory(uart_test)
 add_subdirectory(motor_test)
 add_subdirectory(encoder_test)
 add_subdirectory(mpu_test)
 add_subdirectory(explorer_test)
-
+add_subdirectory(encoder_pimoroni_test)
 
 # include neopixel lib
 include(PicoLED/PicoLed.cmake)

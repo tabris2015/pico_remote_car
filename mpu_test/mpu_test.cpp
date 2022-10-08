@@ -1,12 +1,34 @@
 #include <stdio.h>
 #include <string.h>
+#include <sstream>
+#include <iomanip>
 #include "pico/stdlib.h"
 #include "pico/binary_info.h"
 #include "hardware/i2c.h"
+#include "pico_explorer.hpp"
+#include "drivers/st7789/st7789.hpp"
+#include "libraries/pico_graphics/pico_graphics.hpp"
+#include "font8_data.hpp"
+
+using namespace pimoroni;
 
 static int addr = 0x68;
 
-#ifdef i2c_default
+ST7789 display(
+        PicoExplorer::WIDTH,
+        PicoExplorer::HEIGHT,
+        pimoroni::ROTATE_180,
+        false,
+        get_spi_pins(BG_SPI_FRONT)
+        );
+
+PicoGraphics_PenRGB332 graphics(
+        display.width,
+        display.height,
+        nullptr
+        );
+
+//#ifdef i2c_default
 static void mpu6050_reset() {
     uint8_t buf[] = {0x6B, 0x00};
     i2c_write_blocking(i2c_default, addr, buf, 2, false);
@@ -45,24 +67,30 @@ static void mpu6050_read_raw(int16_t accel[3], int16_t gyro[3], int16_t *temp) {
 
     *temp = buffer[0] << 8 | buffer[1];
 }
-#endif
+//#endif
 
 int main() {
     stdio_init_all();
-#if !defined(i2c_default) || !defined(PICO_DEFAULT_I2C_SDA_PIN) || !defined(PICO_DEFAULT_I2C_SCL_PIN)
-    #warning i2c/mpu6050_i2c example requires a board with I2C pins
-    puts("Default I2C pins were not defined");
-#else
-    printf("Hello, MPU6050! Reading raw data from registers...\n");
+    gpio_init(PICO_DEFAULT_LED_PIN);
+    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+    bool led_state = false;
+
+
+    // init display
+    graphics.set_font(&font8);
+
+    Pen BG = graphics.create_pen(120, 40, 60);
+    Pen WHITE = graphics.create_pen(255, 255, 255);
+
 
     // This example will use I2C0 on the default SDA and SCL pins (4, 5 on a Pico)
     i2c_init(i2c_default, 400 * 1000);
-    gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
-    gpio_set_function(PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C);
-    gpio_pull_up(PICO_DEFAULT_I2C_SDA_PIN);
-    gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
+    gpio_set_function(20, GPIO_FUNC_I2C);
+    gpio_set_function(21, GPIO_FUNC_I2C);
+    gpio_pull_up(20);
+    gpio_pull_up(21);
     // Make the I2C pins available to picotool
-    bi_decl(bi_2pins_with_func(PICO_DEFAULT_I2C_SDA_PIN, PICO_DEFAULT_I2C_SCL_PIN, GPIO_FUNC_I2C));
+    bi_decl(bi_2pins_with_func(20, 21, GPIO_FUNC_I2C));
 
     mpu6050_reset();
 
@@ -71,17 +99,23 @@ int main() {
     while (1) {
         mpu6050_read_raw(acceleration, gyro, &temp);
 
-        // These are the raw numbers from the chip, so will need tweaking to be really useful.
-        // See the datasheet for more information
-        printf("Acc. X = %d, Y = %d, Z = %d\n", acceleration[0], acceleration[1], acceleration[2]);
-        printf("Gyro. X = %d, Y = %d, Z = %d\n", gyro[0], gyro[1], gyro[2]);
-        // Temperature is simple so use the datasheet calculation to get deg C.
-        // Note this is chip temperature.
-        printf("Temp. = %f\n", (temp / 340.0) + 36.53);
-
-        sleep_ms(100);
+        graphics.set_pen(BG);
+        graphics.clear();
+        graphics.set_pen(WHITE);
+        graphics.text("HOLA ACCEL", Point(10, 10), 220);
+        char s_buf[60];
+        sprintf(s_buf, "Accel: \n%d, %d, %d \nGyro: \n%d, %d, %d \nTemp: %d", acceleration[0], acceleration[1], acceleration[2], gyro[0], gyro[1], gyro[2], temp);
+//        std::ostringstream ss;
+//        ss << "x: " << acceleration[0] << ", y: " << acceleration[1] << ", z: " << acceleration[2];
+//        std::string s(ss.str());
+//        graphics.text(s, Point(10, 30), 220);
+        graphics.text(s_buf, Point(10, 60), 220);
+        display.update(&graphics);
+        led_state = !led_state;
+        gpio_put(PICO_DEFAULT_LED_PIN, led_state);
+        sleep_ms(20);
     }
 
-#endif
+//#endif
     return 0;
 }
