@@ -25,6 +25,12 @@ include(libraries/bitmap_fonts/bitmap_fonts)
 include(libraries/hershey_fonts/hershey_fonts)
 include(drivers/msa301/msa301)
 include(drivers/encoder/encoder)
+include(drivers/motor/motor)
+include(drivers/button/button)
+include(drivers/pwm/pwm)
+include(drivers/pid/pid)
+include(drivers/plasma/plasma)
+
 
 ## other executables
 add_subdirectory(uart_test)
@@ -33,6 +39,9 @@ add_subdirectory(encoder_test)
 add_subdirectory(mpu_test)
 add_subdirectory(explorer_test)
 add_subdirectory(encoder_pimoroni_test)
+add_subdirectory(neopixel_test2)
+add_subdirectory(pid_test)
+add_subdirectory(robot_test)
 
 # include neopixel lib
 include(PicoLED/PicoLed.cmake)

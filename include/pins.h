@@ -5,24 +5,22 @@
 #ifndef PICO_REMOTE_CAR_PINS_H
 #define PICO_REMOTE_CAR_PINS_H
 
-#define LED_PIN 17
-#define M1_PWM_PIN 2
-#define M1_ENA_PIN 3
-#define M1_ENB_PIN 4
+#define MOTOR_CPR 7
+#define LED_PIN 25
+#define BUTTON_PIN 24
+#define NEOPIXEL_PIN 23
+#define L_MOTOR_A_PIN 5
+#define L_MOTOR_B_PIN 4
+#define R_MOTOR_A_PIN 2
+#define R_MOTOR_B_PIN 3
 
-#define M2_PWM_PIN 7
-#define M2_ENA_PIN 5
-#define M2_ENB_PIN 6
+#define L_ENCODER_A_PIN 8
+#define L_ENCODER_B_PIN 9
+#define R_ENCODER_A_PIN 7
+#define R_ENCODER_B_PIN 6
 
-#define POT_PIN 26
 
-#define M1_ENC_A_PIN 10
-#define M1_ENC_B_PIN 11
-
-#define M2_ENC_A_PIN 13
-#define M2_ENC_B_PIN 12
-
-#define M1_ENC_INVERTED false
-#define M2_ENC_INVERTED true
+#define L_ENCODER_INVERTED false
+#define R_ENCODER_INVERTED true
 
 #endif //PICO_REMOTE_CAR_PINS_H
