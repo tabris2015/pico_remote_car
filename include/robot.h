@@ -21,27 +21,27 @@ using namespace motor;
 using namespace encoder;
 
 // How many times to update the motor per second
-const uint UPDATES = 50;
+const uint UPDATES = 40;
 constexpr float UPDATE_RATE = 1.0f / (float)UPDATES;
 
 constexpr float GEAR_RATIO = 50.0F;
 constexpr float COUNTS_PER_REV = MOTOR_CPR * GEAR_RATIO * 4;
 constexpr float SPEED_SCALE = 1.0f;
 
-constexpr float ROBOT_MAX_LINEAR_M_S = 0.3f;
-constexpr float ROBOT_MIN_LINEAR_M_S = (-0.3f);
-constexpr float ROBOT_MAX_ANGULAR_R_S = 1.0f;
-constexpr float ROBOT_MIN_ANGULAR_R_S = (-1.0f);
+constexpr float ROBOT_MAX_LINEAR_M_S = 1.0f;
+constexpr float ROBOT_MIN_LINEAR_M_S = (-1.0f);
+constexpr float ROBOT_MAX_ANGULAR_R_S = 6.28f;
+constexpr float ROBOT_MIN_ANGULAR_R_S = (-6.28f);
 
 constexpr float ROBOT_WHEEL_SEPARATION = 0.4f;
 constexpr float ROBOT_WHEEL_RADIUS = 0.15f;
 
 // PID values
-constexpr float L_VEL_KP = 0.1f;   // Velocity proportional (P) gain
-constexpr float L_VEL_KI = 0.0f;    // Velocity integral (I) gain
+constexpr float L_VEL_KP = 0.040f;   // Velocity proportional (P) gain
+constexpr float L_VEL_KI = 0.06f;    // Velocity integral (I) gain
 constexpr float L_VEL_KD = 0.0f;    // Velocity derivative (D) gain
-constexpr float R_VEL_KP = 0.0f;   // Velocity proportional (P) gain
-constexpr float R_VEL_KI = 0.0f;    // Velocity integral (I) gain
+constexpr float R_VEL_KP = 0.040f;   // Velocity proportional (P) gain
+constexpr float R_VEL_KI = 0.06f;    // Velocity integral (I) gain
 constexpr float R_VEL_KD = 0.0f;    // Velocity derivative (D) gain
 constexpr float L_UPDATE_RATE = 1.0f / (float)UPDATES;
 constexpr float R_UPDATE_RATE = 1.0f / (float)UPDATES;

@@ -78,12 +78,12 @@ void Robot::update() {
 }
 
 void Robot::set_left(float vel) {
-//    l_setpoint = vel;
-    l_motor.write(vel);
+    l_setpoint = vel;
+//    l_motor.write(vel);
 }
 void Robot::set_right(float vel) {
-//    r_setpoint = vel;
-    r_motor.write(vel);
+    r_setpoint = vel;
+//    r_motor.write(vel);
 }
 
 void Robot::set_left16(int16_t vel) {
