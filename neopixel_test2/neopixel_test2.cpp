@@ -4,7 +4,7 @@
 #include "pico/stdlib.h"
 #include "ws2812.hpp"
 
-#define NEOPIXEL_PIN 23
+#define NEOPIXEL_PIN 16
 using namespace plasma;
 
 constexpr uint SPEED = 5;

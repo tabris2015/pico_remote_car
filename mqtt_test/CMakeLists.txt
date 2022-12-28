@@ -1,4 +1,4 @@
-add_executable(wifi_test wifi_test.cpp)
+add_executable(wifi_test mqtt_test.cpp)
 target_compile_definitions(wifi_test PRIVATE
         WIFI_SSID=\"${WIFI_SSID}\"
         WIFI_PASSWORD=\"${WIFI_PASSWORD}\"

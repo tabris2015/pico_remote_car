@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 
 # Change your executable name to something creative!
 set(NAME pico_remote_car) # <-- Name your project/executable here!
+set(PICO_BOARD pico_w)
+
 
 include(pimoroni_pico_import.cmake)
 include(pico_sdk_import.cmake)
@@ -30,6 +32,9 @@ include(drivers/button/button)
 include(drivers/pwm/pwm)
 include(drivers/pid/pid)
 include(drivers/plasma/plasma)
+include(lib/RF24/CMakeLists.txt)
+include(lib/RF24Network/CMakeLists.txt)
+include(lib/RF24Mesh/CMakeLists.txt)
 
 
 ## other executables
@@ -42,6 +47,13 @@ add_subdirectory(encoder_pimoroni_test)
 add_subdirectory(neopixel_test2)
 add_subdirectory(pid_test)
 add_subdirectory(robot_test)
+add_subdirectory(rf24_test)
+
+## pico W
+set(WIFI_SSID "ZTE_2.4G_nPfgdX" CACHE INTERNAL "ssid")
+set(WIFI_PASSWORD "yUUSd4Ar" CACHE INTERNAL "pass")
+add_subdirectory(wifi_test)
+add_subdirectory(wifi_test2)
 
 # include neopixel lib
 include(PicoLED/PicoLed.cmake)
